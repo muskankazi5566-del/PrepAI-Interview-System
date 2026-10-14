@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PrepAI</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6ff;
+            color: #172b45;
+        }
+
+        .container {
+            max-width: 1120px;
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        .hero {
+            background: linear-gradient(110deg, #4936d3, #8035ed);
+            color: white;
+            padding: 40px 36px 36px;
+            border-radius: 20px;
+            margin-bottom: 32px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin: 0 0 20px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            background: white;
+            color: #4936d3;
+            padding: 14px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary-btn:hover {
+            background: #f0edff;
+        }
+
+        h2 {
+            font-size: 25px;
+            margin: 32px 0 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px 26px;
+            border-radius: 17px;
+            box-shadow: 0 8px 28px rgba(35, 39, 80, 0.035);
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin: 8px 0 18px;
+            color: #14243b;
+        }
+
+        .card p {
+            color: #60738e;
+            font-size: 16px;
+            line-height: 1.7;
+            min-height: 54px;
+        }
+
+        .card a {
+            display: inline-block;
+            margin-top: 8px;
+            color: #4936ff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        .tip {
+            background: #edf0ff;
+            color: #3434aa;
+            padding: 20px;
+            margin-top: 26px;
+            border-radius: 14px;
+            line-height: 1.6;
+        }
+
+        .tip strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .history {
+            background: white;
+            padding: 24px;
+            margin-top: 28px;
+            border-radius: 15px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f5f6ff;
+        }
+
+        .message {
+            background: #edf0ff;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            color: #60738e;
+            padding: 36px 10px 20px;
+        }
+
+        footer a {
+            color: #4936d3;
+            text-decoration: none;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 28px 22px;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+
+            .container {
+                width: 92%;
+                margin-top: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <section class="hero">
+        <h1>Welcome, {{ session.get('user_name', 'User') }}! 👋</h1>
+        <p>
+            Ready to improve your interview skills? Practice questions,
+            submit answers, and review your feedback to prepare for your
+            next opportunity.
+        </p>
+        <a class="primary-btn" href="{{ url_for('roles_page') }}">
+            Start Interview Practice →
+        </a>
+    </section>
+
+    <h2>Your Learning Workspace</h2>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">🎯</div>
+            <h3>Mock Interview</h3>
+            <p>
+                Answer practice questions and receive an automated evaluation.
+            </p>
+            <a href="{{ url_for('roles_page') }}">Start practicing →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>Performance History</h3>
+            <p>
+                Review your previous interview attempts and scores.
+            </p>
+            <a href="{{ url_for('history') }}">View history →</a>
+        </div>
+
+        <div class="card">
+            <div class="icon">🤖</div>
+            <h3>AI Feedback</h3>
+            <p>
+                Use text similarity and keyword matching to identify areas
+                for improvement.
+            </p>
+            <a href="{{ url_for('roles_page') }}">Get started →</a>
+        </div>
+    </div>
+
+    <div class="tip">
+        <strong>💡 Preparation tip</strong>
+        Explain your answers in your own words, include relevant examples,
+        and focus on the key concepts in each question.
+    </div>
+
+    {% if recent_history %}
+    <section class="history">
+        <h2>Recent Interview Attempts</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Question</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in recent_history %}
+                <tr>
+                    <td>{{ item.role }}</td>
+                    <td>{{ item.question }}</td>
+                    <td>{{ item.score }}%</td>
+                    <td>{{ item.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% endif %}
+
+    <footer>
+        © 2026 PrepAI — AI Interview Preparation System
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview History | PrepAI</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7ff;
+            color: #172554;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 6%;
+            background: white;
+            box-shadow: 0 2px 12px #0f172a0d;
+        }
+
+        .brand {
+            color: #4f46e5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            margin-left: 15px;
+            color: #475569;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header p { color: #64748b; line-height: 1.6; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary { background: #4f46e5; color: white; }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            padding: 22px;
+            border: 1px solid #e0e7ff;
+            border-radius: 14px;
+            background: white;
+        }
+
+        .stat p { margin: 0 0 12px; color: #64748b; }
+
+        .stat h2 {
+            margin: 0;
+            color: #4f46e5;
+            font-size: 28px;
+        }
+
+        .table-card {
+            padding: 22px;
+            background: white;
+            border: 1px solid #e0e7ff;
+            border-radius: 14px;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            line-height: 1.5;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        td { color: #334155; }
+
+        .score {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .empty {
+            padding: 35px 15px;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .empty h3 { color: #172554; }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 16px; }
+            nav a { margin-left: 8px; font-size: 13px; }
+            .table-card { padding: 12px; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="brand">✦ PrepAI</div>
+        <div>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('interview') }}">Practice</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="header">
+            <div>
+                <h1>📊 Interview History</h1>
+                <p>Review your previous attempts and track your progress.</p>
+            </div>
+
+            <a href="{{ url_for('interview') }}" class="btn primary">
+                + Practice Now
+            </a>
+        </section>
+
+        <section class="summary">
+            <div class="stat">
+                <p>Total Attempts</p>
+                <h2>{{ records|length }}</h2>
+            </div>
+
+            <div class="stat">
+                <p>Average Score</p>
+                <h2>
+                    {% if records %}
+                        {{ (records|sum(attribute='score') / records|length)|round(1) }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </h2>
+            </div>
+
+            <div class="stat">
+                <p>Latest Score</p>
+                <h2>
+                    {% if records %}
+                        {{ records[0].score }}%
+                    {% else %}
+                        --
+                    {% endif %}
+                </h2>
+            </div>
+        </section>
+
+        <section class="table-card">
+            <h2>Your Previous Attempts</h2>
+
+            {% if records %}
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Question</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in records %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ item.question|default('Interview question') }}</td>
+                                    <td>
+                                        <span class="score">
+                                            {{ item.score }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{ item.created_at|default('Not available') }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">
+                    <h3>No interview attempts yet</h3>
+                    <p>Complete your first practice question to see your results here.</p>
+                    <a href="{{ url_for('interview') }}" class="btn primary">
+                        Start First Practice
+                    </a>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        © 2026 PrepAI — AI Interview Preparation System
+    </footer>
+</body>
+</html>

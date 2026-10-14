@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Results | PrepAI</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7ff;
+            color: #172554;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 6%;
+            background: white;
+            box-shadow: 0 2px 12px #0f172a0d;
+        }
+
+        .brand {
+            color: #4f46e5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav a {
+            margin-left: 15px;
+            color: #475569;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .heading p { color: #64748b; line-height: 1.6; }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e7ff;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px #0f172a08;
+        }
+
+        .score-card {
+            text-align: center;
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+        }
+
+        .score-circle {
+            width: 145px;
+            height: 145px;
+            margin: 20px auto;
+            border: 9px solid #c7d2fe;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+
+        .score {
+            color: #4f46e5;
+            font-size: 38px;
+            font-weight: bold;
+        }
+
+        .out-of { color: #64748b; font-size: 13px; }
+
+        .status {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 16px;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #475569;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .question {
+            color: #4338ca;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .tip {
+            padding: 20px;
+            background: #eef2ff;
+            color: #3730a3;
+            border-radius: 12px;
+            line-height: 1.8;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .primary { background: #4f46e5; color: white; }
+        .secondary { background: #e0e7ff; color: #3730a3; }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 16px; }
+            nav a { margin-left: 8px; font-size: 13px; }
+            .card { padding: 18px; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="brand">✦ PrepAI</div>
+        <div>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('history') }}">History</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="heading">
+            <h1>🎉 Your Interview Results</h1>
+            <p>Review your score and feedback to improve your interview skills.</p>
+        </section>
+
+        <section class="card score-card">
+            <h2>Your Answer Score</h2>
+
+            <div class="score-circle">
+                <div class="score">{{ score|default(0) }}</div>
+                <div class="out-of">out of 100</div>
+            </div>
+
+            <span class="status">
+                {% if score|default(0)|float >= 80 %}
+                    Excellent Work!
+                {% elif score|default(0)|float >= 60 %}
+                    Good Effort!
+                {% elif score|default(0)|float >= 40 %}
+                    Keep Practicing!
+                {% else %}
+                    More Practice Needed
+                {% endif %}
+            </span>
+        </section>
+
+        <section class="card">
+            <h2>📝 Interview Question</h2>
+            <div class="question">
+                {{ question.question|default('Interview question') }}
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>✍️ Your Submitted Answer</h2>
+            <div class="content">{{ user_answer|default('No answer available') }}</div>
+        </section>
+
+        <section class="card">
+            <h2>🤖 Evaluation Feedback</h2>
+            <div class="content">{{ feedback|default('Review the expected answer and practice explaining the key concepts.') }}</div>
+        </section>
+
+        <section class="card">
+            <h2>✅ Expected Answer</h2>
+            <div class="content">{{ sample_answer|default('Expected answer is not available.') }}</div>
+        </section>
+
+        <section class="tip">
+            <strong>💡 How to improve</strong><br>
+            Explain the concept clearly, include the important keywords,
+            and provide a practical example. Compare your answer with the
+            expected answer to identify missing concepts.
+        </section>
+
+        <div class="actions">
+            <a href="{{ url_for('interview') }}" class="btn primary">
+                Practice Again →
+            </a>
+
+            <a href="{{ url_for('history') }}" class="btn secondary">
+                View History
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="btn secondary">
+                Dashboard
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 PrepAI — AI Interview Preparation System
+    </footer>
+</body>
+</html>
