@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Role | PrepAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7ff;
+            color: #172554;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 7%;
+            background: white;
+            box-shadow: 0 2px 10px #00000008;
+        }
+
+        .logo {
+            color: #5145ed;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #334155;
+            margin-left: 22px;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 55px 20px 30px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .roles {
+            max-width: 1150px;
+            margin: 25px auto 60px;
+            padding: 0 22px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .role-card {
+            background: white;
+            border: 1px solid #e0e7ff;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 5px 20px #1e293b08;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 28px #5145ed18;
+        }
+
+        .role-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef0ff;
+            border-radius: 14px;
+            font-size: 29px;
+            margin-bottom: 20px;
+        }
+
+        .role-card h2 {
+            font-size: 21px;
+            margin: 0 0 12px;
+        }
+
+        .role-card p {
+            min-height: 48px;
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .role-card a {
+            display: block;
+            margin-top: 22px;
+            padding: 13px;
+            text-align: center;
+            background: #5145ed;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 9px;
+        }
+
+        .role-card a:hover {
+            background: #4035d5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 850px) {
+            .roles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .roles {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            nav {
+                padding: 16px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">✦ PrepAI</div>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('history') }}">History</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Choose Your Interview Role</h1>
+    <p>
+        Select your desired career role and practise interview questions
+        to improve your skills and confidence.
+    </p>
+</section>
+
+<section class="roles">
+
+    {% set role_info = {
+        'Data Analyst': ('📊', 'Practise data analysis, SQL, Excel and data visualization questions.'),
+        'Data Scientist': ('📈', 'Prepare for statistics, Python, data science and predictive modelling.'),
+        'Python Developer': ('🐍', 'Test your Python programming knowledge and problem-solving skills.'),
+        'AI/ML Engineer': ('🤖', 'Practise artificial intelligence, machine learning and neural network questions.'),
+        'Machine Learning Engineer': ('🧠', 'Explore ML algorithms, model training and evaluation questions.'),
+        'Web Developer': ('🌐', 'Prepare for HTML, CSS, JavaScript and web development questions.'),
+        'Frontend Developer': ('🎨', 'Practise user interfaces, responsive design and frontend technologies.'),
+        'Backend Developer': ('⚙️', 'Explore server-side programming, APIs and application logic.'),
+        'Database Administrator': ('🗄️', 'Practise SQL, database design, keys and database management.'),
+        'Cybersecurity Analyst': ('🔐', 'Review security concepts, authentication and access control.')
+    } %}
+
+    {% for role in roles %}
+        {% set info = role_info.get(role, ('💼', 'Practise interview questions and build your career skills.')) %}
+
+        <article class="role-card">
+            <div class="role-icon">{{ info[0] }}</div>
+            <h2>{{ role }}</h2>
+            <p>{{ info[1] }}</p>
+
+            <a href="{{ url_for('interview', role=role) }}">
+                Start Interview →
+            </a>
+        </article>
+    {% else %}
+        <p>No interview roles are available yet. Please add questions to the database.</p>
+    {% endfor %}
+
+</section>
+
+<footer>
+    © 2026 PrepAI — AI Interview Preparation System
+</footer>
+
+</body>
+</html>
+```

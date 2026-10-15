@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Practice | PrepAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6ff;
+            color: #172554;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 6%;
+            background: white;
+        }
+
+        .logo {
+            color: #5145ed;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        nav a {
+            margin-left: 22px;
+            text-decoration: none;
+            color: #334155;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 34px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .card {
+            margin-top: 28px;
+            padding: 30px;
+            background: white;
+            border: 1px solid #dce3ff;
+            border-radius: 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 9px 14px;
+            background: #eef0ff;
+            color: #5145ed;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .question {
+            margin: 20px 0;
+            padding: 18px;
+            background: #f8faff;
+            border-left: 5px solid #5145ed;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 190px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        button, .back {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 14px 22px;
+            border: none;
+            border-radius: 9px;
+            background: #5145ed;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4035c8;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back {
+            margin-left: 8px;
+            background: #eef0ff;
+            color: #3730a3;
+        }
+
+        .voice-panel {
+            margin-top: 20px;
+            padding: 18px;
+            background: #f8faff;
+            border: 1px solid #e0e7ff;
+            border-radius: 12px;
+        }
+
+        .voice-panel h3 {
+            margin-top: 0;
+        }
+
+        .voice-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .voice-buttons button {
+            margin-top: 8px;
+            padding: 12px 15px;
+        }
+
+        .voice-buttons .secondary {
+            background: #eef0ff;
+            color: #3730a3;
+        }
+
+        #voiceStatus {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tip {
+            margin-top: 24px;
+            padding: 20px;
+            background: #eef2ff;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 20px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 15px;
+            }
+
+            nav a {
+                margin-left: 10px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">✦ PrepAI</div>
+    <div>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('history') }}">History</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <h1>🎯 Interview Practice</h1>
+
+    <p class="subtitle">
+        Read or listen to the question, speak or type your answer,
+        and submit it to receive automated feedback.
+    </p>
+
+    <section class="card">
+
+        <span class="badge">INTERVIEW QUESTION</span>
+
+        {% if question %}
+            <div class="question" id="interviewQuestion">
+                {{ question.question }}
+            </div>
+        {% else %}
+            <div class="question">
+                No interview question is available.
+                Please add questions to your database.
+            </div>
+        {% endif %}
+
+        <div class="voice-panel">
+            <h3>🔊 Listen to the Question</h3>
+
+            <button type="button" id="readQuestion"
+                {% if not question %}disabled{% endif %}>
+                🔊 Read Question Aloud
+            </button>
+
+            <button type="button" id="stopReading" class="back">
+                Stop Audio
+            </button>
+        </div>
+
+        <form action="{{ url_for('submit_answer') }}" method="POST">
+
+            {% if question %}
+                <input type="hidden" name="question_id"
+                       value="{{ question.id }}">
+            {% endif %}
+
+            <label for="answer"><strong>Your Answer</strong></label>
+
+            <textarea
+                id="answer"
+                name="answer"
+                placeholder="Type your answer or use the microphone to speak..."
+                required></textarea>
+
+            <div class="voice-panel">
+                <h3>🎤 Voice Answer</h3>
+
+                <p class="subtitle">
+                    Click Start Speaking and allow microphone access.
+                    Review your transcribed answer before submitting.
+                </p>
+
+                <div class="voice-buttons">
+                    <button type="button" id="startVoice">
+                        🎤 Start Speaking
+                    </button>
+
+                    <button type="button" id="stopVoice" class="secondary">
+                        ⏹ Stop Recording
+                    </button>
+
+                    <button type="button" id="clearVoice" class="secondary">
+                        🗑 Clear Answer
+                    </button>
+                </div>
+
+                <p id="voiceStatus" aria-live="polite">
+                    Ready to start. Microphone support depends on your browser.
+                </p>
+            </div>
+
+            <p class="subtitle">
+                Tip: Give a clear, relevant answer and explain important concepts.
+            </p>
+
+            <button type="submit" {% if not question %}disabled{% endif %}>
+                Submit Answer →
+            </button>
+
+            <a class="back" href="{{ url_for('dashboard') }}">
+                Back to Dashboard
+            </a>
+
+        </form>
+    </section>
+
+    <div class="tip">
+        <strong>💡 Interview tip</strong><br>
+        Start with a definition, explain how the concept works, and finish
+        with a practical example.
+    </div>
+
+</main>
+
+<footer>
+    © 2026 PrepAI — AI Interview Preparation System
+</footer>
+
+<script>
+    const answerBox = document.getElementById("answer");
+    const statusText = document.getElementById("voiceStatus");
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    let recognition = null;
+    let isListening = false;
+    let finalTranscript = "";
+
+    // Read the question aloud
+    document.getElementById("readQuestion").addEventListener("click", function () {
+        const questionElement =
+            document.getElementById("interviewQuestion");
+
+        if (!questionElement || !("speechSynthesis" in window)) {
+            alert("Question audio is not supported in this browser.");
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const speech = new SpeechSynthesisUtterance(
+            questionElement.innerText.trim()
+        );
+
+        speech.lang = "en-IN";
+        window.speechSynthesis.speak(speech);
+    });
+
+    // Stop reading the question
+    document.getElementById("stopReading").addEventListener("click", function () {
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+        }
+    });
+
+    // Configure browser speech recognition
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-IN";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onstart = function () {
+            isListening = true;
+            statusText.textContent = "Listening... Speak your answer.";
+        };
+
+        recognition.onresult = function (event) {
+            let interimTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + " ";
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+
+            answerBox.value = finalTranscript + interimTranscript;
+        };
+
+        recognition.onerror = function (event) {
+            statusText.textContent =
+                "Microphone error: " + event.error +
+                ". Check microphone permission and try again.";
+        };
+
+        recognition.onend = function () {
+            isListening = false;
+
+            if (statusText.textContent.startsWith("Listening")) {
+                statusText.textContent =
+                    "Recording stopped. Review or edit your answer.";
+            }
+        };
+
+    } else {
+        document.getElementById("startVoice").disabled = true;
+        statusText.textContent =
+            "Speech recognition is not supported here. Try Google Chrome.";
+    }
+
+    // Start speaking
+    document.getElementById("startVoice").addEventListener("click", function () {
+        if (!recognition || isListening) {
+            return;
+        }
+
+        finalTranscript = answerBox.value.trim();
+
+        if (finalTranscript) {
+            finalTranscript += " ";
+        }
+
+        try {
+            recognition.start();
+        } catch (error) {
+            statusText.textContent =
+                "Could not start the microphone. Please try again.";
+        }
+    });
+
+    // Stop speaking
+    document.getElementById("stopVoice").addEventListener("click", function () {
+        if (recognition && isListening) {
+            recognition.stop();
+        }
+    });
+
+    // Clear answer
+    document.getElementById("clearVoice").addEventListener("click", function () {
+        if (recognition && isListening) {
+            recognition.stop();
+        }
+
+        finalTranscript = "";
+        answerBox.value = "";
+        statusText.textContent = "Answer cleared.";
+    });
+</script>
+
+</body>
+</html>

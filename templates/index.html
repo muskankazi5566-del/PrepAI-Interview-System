@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepAI | Interview Preparation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f8fafc;
+            color: #172033;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 8%;
+            background: white;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            color: #4f46e5;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            margin-left: 25px;
+            font-weight: 600;
+        }
+
+        .nav-links .login {
+            padding: 11px 20px;
+            border: 1px solid #dbe2ee;
+            border-radius: 9px;
+        }
+
+        .hero {
+            max-width: 1150px;
+            margin: auto;
+            padding: 90px 25px 65px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 55px;
+            align-items: center;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 9px 14px;
+            background: #eeedff;
+            color: #4f46e5;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: clamp(38px, 5vw, 58px);
+            line-height: 1.12;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        h1 span {
+            color: #4f46e5;
+        }
+
+        .description {
+            color: #64748b;
+            line-height: 1.9;
+            font-size: 16px;
+            max-width: 510px;
+            margin-bottom: 30px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            padding: 15px 23px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-right: 10px;
+            margin-bottom: 12px;
+        }
+
+        .primary {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 8px 20px #4f46e533;
+        }
+
+        .secondary {
+            background: white;
+            color: #334155;
+            border: 1px solid #e2e8f0;
+        }
+
+        .preview {
+            background: linear-gradient(140deg, #eef2ff, #e0e7ff);
+            border-radius: 25px;
+            padding: 25px;
+        }
+
+        .dashboard {
+            background: white;
+            padding: 24px;
+            border-radius: 18px;
+            box-shadow: 0 20px 55px #3730a310;
+        }
+
+        .dashboard h3 {
+            margin-bottom: 7px;
+            font-size: 19px;
+        }
+
+        .muted {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 17px;
+            margin-top: 17px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .stat strong {
+            font-size: 23px;
+            color: #4f46e5;
+        }
+
+        .progress {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress div {
+            width: 78%;
+            height: 100%;
+            background: #6366f1;
+        }
+
+        .features {
+            padding: 55px 8% 75px;
+            background: white;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            max-width: 1100px;
+            margin: 35px auto 0;
+            text-align: left;
+        }
+
+        .feature {
+            padding: 25px;
+            border: 1px solid #e8edf5;
+            border-radius: 15px;
+        }
+
+        .feature .icon {
+            font-size: 29px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        a:hover {
+            opacity: 0.85;
+        }
+
+        @media (max-width: 750px) {
+            nav {
+                padding: 20px;
+            }
+
+            .nav-links a {
+                margin-left: 10px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 55px;
+                gap: 35px;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">✦ PrepAI</div>
+
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="{{ url_for('login') }}" class="login">Login</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <div class="tag">✦ YOUR PERSONAL AI INTERVIEW COACH</div>
+
+            <h1>Land your dream job with <span>confidence.</span></h1>
+
+            <p class="description">
+                Practise real interview questions, improve your answers,
+                and track your progress with your personal interview
+                preparation assistant.
+            </p>
+
+            <div class="buttons">
+                <a href="{{ url_for('register') }}" class="primary">
+                    Get Started &rarr;
+                </a>
+
+                <a href="{{ url_for('login') }}" class="secondary">
+                    Sign In
+                </a>
+            </div>
+        </div>
+
+        <div class="preview">
+            <div class="dashboard">
+                <h3>Your preparation overview</h3>
+                <p class="muted">Example dashboard preview</p>
+
+                <div class="stat">
+                    <div>
+                        <p class="muted">Practice questions</p>
+                        <strong>12+</strong>
+                    </div>
+                    <span>📝</span>
+                </div>
+
+                <div class="stat">
+                    <div>
+                        <p class="muted">Your progress</p>
+                        <strong>78%</strong>
+                    </div>
+                    <span>📈</span>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <p style="font-weight: 600;">Interview readiness</p>
+                    <div class="progress"><div></div></div>
+                    <p class="muted" style="margin-top: 10px;">
+                        Keep practising to improve your skills!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Everything you need to prepare</h2>
+        <p class="muted">Build confidence one answer at a time.</p>
+
+        <div class="feature-list">
+            <div class="feature">
+                <div class="icon">🎯</div>
+                <h3>Role-based questions</h3>
+                <p>Practise questions for Data Analyst, Data Scientist,
+                Python Developer, and AI/ML Engineer roles.</p>
+            </div>
+
+            <div class="feature">
+                <div class="icon">🤖</div>
+                <h3>Answer feedback</h3>
+                <p>Receive similarity-based scores and feedback to help
+                you improve your interview answers.</p>
+            </div>
+
+            <div class="feature">
+                <div class="icon">📊</div>
+                <h3>Track your progress</h3>
+                <p>Review previous attempts and monitor your practice
+                scores over time.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        PrepAI · AI Interview Preparation System · Student Project
+    </footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | PrepAI</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 430px;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(30, 41, 59, .12);
+        }
+        h1 { margin-bottom: 8px; color: #172554; }
+        p { color: #64748b; line-height: 1.5; }
+        label { display: block; margin: 18px 0 7px; font-weight: bold; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            border: 0;
+            border-radius: 8px;
+            background: #4f46e5;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #4338ca; }
+        .bottom { text-align: center; margin-top: 20px; }
+        a { color: #4f46e5; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Create your account</h1>
+        <p>Join PrepAI and start preparing for interviews.</p>
+
+        <form method="POST" action="{{ url_for('register') }}">
+            <label for="name">Full Name</label>
+            <input id="name" type="text" name="name"
+                   placeholder="Enter your full name" required>
+
+            <label for="email">Email Address</label>
+            <input id="email" type="email" name="email"
+                   placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" name="password"
+                   placeholder="Create a password" minlength="8" required>
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <p class="bottom">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Log in</a>
+        </p>
+        <p class="bottom"><a href="{{ url_for('index') }}">← Back to Home</a></p>
+    </div>
+</body>
+</html>
